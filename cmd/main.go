@@ -5,6 +5,7 @@ import (
 
 	"github.com/barankibar/shopicity-svc-gateway/pkg/auth"
 	"github.com/barankibar/shopicity-svc-gateway/pkg/config"
+	"github.com/barankibar/shopicity-svc-gateway/pkg/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,9 +14,14 @@ func main() {
 	if err != nil {
 		log.Fatalln("Failed at config: ", err)
 	}
-	r := gin.Default()
 
-	auth.RegisterRoutes(r, &c)
+	// ROUTER INSTANCE
+	router := gin.Default()
 
-	r.Run(c.Port)
+	// MIDDLEWARES
+	router.Use(middlewares.ErrorHandler)
+
+	auth.RegisterRoutes(router, &c)
+
+	router.Run(c.Port)
 }

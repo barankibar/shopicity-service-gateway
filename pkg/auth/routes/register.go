@@ -2,6 +2,7 @@ package routes
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/barankibar/shopicity-svc-gateway/pkg/auth/pb"
@@ -20,7 +21,7 @@ func Register(ctx *gin.Context, c pb.AuthServiceClient) {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-
+	fmt.Println(body)
 	res, err := c.Register(context.Background(), &pb.RegisterRequest{
 		Email:    body.Email,
 		Password: body.Password,
