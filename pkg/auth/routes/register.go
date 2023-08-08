@@ -2,7 +2,6 @@ package routes
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/barankibar/shopicity-svc-gateway/pkg/auth/pb"
@@ -10,18 +9,19 @@ import (
 )
 
 type RegisterRequest struct {
+	Name     string `json:"name"`
+	Surname  string `json:"surname"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
 func Register(ctx *gin.Context, c pb.AuthServiceClient) {
 	body := RegisterRequest{}
-
 	if err := ctx.BindJSON(&body); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-	fmt.Println(body)
+
 	res, err := c.Register(context.Background(), &pb.RegisterRequest{
 		Email:    body.Email,
 		Password: body.Password,
